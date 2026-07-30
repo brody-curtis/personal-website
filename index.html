@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Locked Top Navigation -->
+    <header class="navbar">
+        <div class="logo">MY NAME</div>
+        <nav>
+            <ul>
+                <li><a href="#about">ABOUT</a></li>
+                <li><a href="#skills">SKILLS</a></li>
+                <li><a href="#resume">RESUME</a></li>
+                <li><a href="#projects">PROJECTS</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="section-container">
+        <h2>About</h2>
+        <div class="about-content">
+            <div class="photo-placeholder">
+                <img src="assets/profile-photo.jpg" alt="Profile Photo Placeholder">
+            </div>
+            <div class="about-text">
+                <p>[Placeholder for your personal bio. This is where you will write about your background, your education, and your interests in development and engineering.]</p>
+                <p>[Second paragraph placeholder...]</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section-container bg-light">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+            <div class="skill"><img src="assets/icon-python.png" alt="Python"></div>
+            <div class="skill"><img src="assets/icon-cpp.png" alt="C++"></div>
+            <div class="skill"><img src="assets/icon-html.png" alt="HTML/CSS"></div>
+            <div class="skill"><img src="assets/icon-js.png" alt="JavaScript"></div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="section-container">
+        <h2>Resume</h2>
+        <div class="resume-placeholder">
+            <img src="assets/resume-placeholder.jpg" alt="Resume Placeholder">
+            <!-- Optional: A button to download the PDF -->
+            <br>
+            <a href="assets/resume.pdf" target="_blank" class="btn">View / Download PDF</a>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section-container bg-light">
+        <h2>Projects</h2>
+        <p class="subtitle">Things I'm currently working on.</p>
+        
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <a href="projects/project-1/index.html" class="project-card">
+                <img src="assets/project1-icon.png" alt="Chess App Icon" class="project-icon">
+                <h3>Interactive Chess Application</h3>
+                <p>A full-stack web application with a customized frontend and backend logic. Click to view.</p>
+            </a>
+
+            <!-- Project 2 -->
+            <a href="projects/project-2/index.html" class="project-card">
+                <img src="assets/project2-icon.png" alt="Analytics Icon" class="project-icon">
+                <h3>Sports Analytics Scraper</h3>
+                <p>A data parsing tool built to pull and analyze player statistics and rosters. Click to view.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-container">
+        <h2>Contact</h2>
+        <p class="subtitle">Let's get in touch!</p>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <img src="assets/icon-email.png" alt="Email">
+                <p>Email:</p>
+                <a href="mailto:your.email@example.com">your.email@example.com</a>
+            </div>
+            <div class="contact-item">
+                <img src="assets/icon-linkedin.png" alt="LinkedIn">
+                <p>LinkedIn:</p>
+                <a href="https://linkedin.com/in/yourprofile">linkedin.com/in/yourprofile</a>
+            </div>
+            <div class="contact-item">
+                <img src="assets/icon-instagram.png" alt="Instagram">
+                <p>Instagram:</p>
+                <a href="https://instagram.com/yourhandle">@yourhandle</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
