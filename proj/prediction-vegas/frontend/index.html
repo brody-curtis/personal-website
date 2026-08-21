@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brody Curtis Stat Predictor</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f12;
+      --surface: #151719;
+      --surface2: #1c1f23;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.15);
+      --text: #f0f0ee;
+      --muted: #888b8f;
+      --accent: #c8f04a;
+      --accent-dim: rgba(200,240,74,0.12);
+      --danger: #ff6b6b;
+      --radius: 10px;
+      --font: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      min-height: 100vh;
+      padding: 3rem 1.5rem;
+    }
+
+    .page { max-width: 660px; margin: 0 auto; }
+
+    header { margin-bottom: 2rem; }
+    header h1 {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    header p { font-size: 14px; color: var(--muted); }
+
+    /* Tab toggle */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 4px;
+      margin-bottom: 2rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab-btn.active { background: var(--accent); color: var(--bg); }
+
+    /* Shared card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .card-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    /* Specific Bet */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label { font-size: 12px; color: var(--muted); }
+
+    input, select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      padding: 8px 10px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+    input::placeholder { color: var(--muted); }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888b8f' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+    .years-wrap { display: flex; gap: 10px; flex-wrap: wrap; }
+    .year-chip {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .year-chip:hover { border-color: var(--border-hover); }
+    .year-chip input[type="checkbox"] { display: none; }
+    .year-chip.active { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+
+    .run-btn {
+      width: 100%;
+      padding: 11px;
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--bg);
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-top: 4px;
+    }
+    .run-btn:hover { opacity: 0.9; }
+    .run-btn:active { transform: scale(0.99); }
+    .run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .err { font-size: 13px; color: var(--danger); margin-top: 10px; display: none; }
+    .err.show { display: block; }
+    .spinner { text-align: center; font-size: 13px; color: var(--muted); font-family: var(--mono); margin-top: 10px; display: none; }
+    .spinner.show { display: block; }
+    .results { display: none; margin-top: 12px; }
+    .results.show { display: block; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+
+    .metric { background: var(--surface2); border-radius: var(--radius); padding: 1rem 1.25rem; }
+    .metric-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+    .metric-value { font-family: var(--mono); font-size: 32px; font-weight: 500; color: var(--accent); line-height: 1; }
+    .metric-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .pref-bar-wrap { padding: 4px 0 8px; }
+    .pref-bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); font-family: var(--mono); margin-bottom: 22px; }
+    .pref-bar-outer { position: relative; height: 10px; border-radius: 99px; background: linear-gradient(to right, #c0392b 0%, #e74c3c 15%, #e67e22 28%, #f1c40f 40%, #27ae60 55%, #2980b9 68%, #3498db 80%, #8e44ad 100%); }
+    .pref-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: var(--text); border: 2px solid var(--bg); transition: left 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 2; }
+    .pref-score-label { position: absolute; top: -22px; transform: translateX(-50%); font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--text); white-space: nowrap; transition: left 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .pref-bar-section-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 10px; }
+    .bar-divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+    /* All Bets page */
+    #page-all-bets { display: none; }
+    .bet-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .bet-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      transition: border-color 0.15s;
+    }
+    .bet-card:hover { border-color: var(--border-hover); }
+
+    .bet-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .bet-player {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .bet-ou-badge {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+    .bet-ou-badge.over {
+      background: rgba(200,240,74,0.15);
+      color: var(--accent);
+      border: 1px solid rgba(200,240,74,0.3);
+    }
+    .bet-ou-badge.under {
+      background: rgba(100,160,255,0.12);
+      color: #7eb8ff;
+      border: 1px solid rgba(100,160,255,0.25);
+    }
+
+    .bet-matchup {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: var(--mono);
+    }
+    .bet-matchup b { color: var(--text); font-weight: 500; }
+
+    .bet-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .bet-stat {
+      background: var(--surface2);
+      border-radius: 7px;
+      padding: 8px 10px;
+    }
+    .bet-stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: var(--mono);
+      margin-bottom: 4px;
+    }
+    .bet-stat-value {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .bet-stat-value.accent { color: var(--accent); }
+
+    .bet-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+    .bet-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .bet-score {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .bet-score-label { color: var(--muted); }
+    .bet-score-value { font-family: var(--mono); font-weight: 500; color: var(--text); }
+    .bet-score-value.hi { color: var(--accent); }
+
+    @media (max-width: 520px) {
+      .grid2, .grid3, .result-grid { grid-template-columns: 1fr; }
+      .bet-stats { grid-template-columns: repeat(2, 1fr); }
+      .bet-scores { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>Brody Curtis Stat Predictor</h1>
+    <p>Enter player and game details to generate a yardage prediction and bet preferability score.</p>
+  </header>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tab-specific" onclick="switchTab('specific')">specific bet</button>
+    <button class="tab-btn" id="tab-all" onclick="switchTab('all')">all bets</button>
+  </div>
+
+  <!-- PAGE: Specific Bet -->
+  <div id="page-specific">
+
+    <div class="card">
+      <p class="card-label">Player</p>
+      <div class="grid2">
+        <div class="field">
+          <label>Player name</label>
+          <input type="text" id="player" placeholder="e.g. Patrick Mahomes" />
+        </div>
+        <div class="field">
+          <label>Player's team</label>
+          <select id="pTeamA_player"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Game details</p>
+      <div class="grid3">
+        <div class="field">
+          <label>Opposing team</label>
+          <select id="cTeamA"></select>
+        </div>
+        <div class="field">
+          <label>Upcoming week</label>
+          <input type="number" id="currentW" placeholder="e.g. 12" min="1" max="18" />
+        </div>
+        <div class="field">
+          <label>Current year</label>
+          <select id="currentY"></select>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="field">
+        <label style="margin-bottom:8px;">Seasons to include</label>
+        <div class="years-wrap" id="yearsWrap"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Betting line</p>
+      <div class="grid3">
+        <div class="field">
+          <label>Vegas line (yards)</label>
+          <input type="number" id="PREDICT2" placeholder="e.g. 275" />
+        </div>
+        <div class="field">
+          <label>Over odds</label>
+          <input type="number" id="o" placeholder="e.g. -110" />
+        </div>
+        <div class="field">
+          <label>Under odds</label>
+          <input type="number" id="u" placeholder="e.g. -110" />
+        </div>
+      </div>
+    </div>
+
+    <button class="run-btn" id="runBtn" onclick="runPrediction()">run prediction →</button>
+    <p class="err" id="errMsg"></p>
+    <p class="spinner" id="spinner">running model...</p>
+
+    <div class="results" id="results">
+      <div class="card" style="margin-top:0;">
+        <p class="card-label">Results</p>
+        <div class="result-grid">
+          <div class="metric">
+            <p class="metric-label">Predicted yards</p>
+            <p class="metric-value" id="resPred">—</p>
+            <p class="metric-sub">yards</p>
+          </div>
+          <div class="metric">
+            <p class="metric-label">Preferability score</p>
+            <p class="metric-value" id="resPref">—</p>
+            <p class="metric-sub" id="resDirection">—</p>
+          </div>
+        </div>
+
+        <div class="pref-bar-wrap">
+          <div class="pref-bar-labels">
+            <span>0</span><span>50</span><span>100</span><span>150</span><span>200+</span>
+          </div>
+          <div class="pref-bar-outer">
+            <div class="pref-score-label" id="prefScoreLabel">—</div>
+            <div class="pref-marker" id="prefMarker" style="left:0%"></div>
+          </div>
+          <div class="pref-bar-section-labels">
+            <span>definite no</span><span>questionable</span><span>maybe</span><span>strong yes</span>
+          </div>
+        </div>
+
+        <div class="bar-divider"></div>
+
+        <div class="result-grid" style="margin-bottom:14px;">
+          <div class="metric">
+            <p class="metric-label">Safety score</p>
+            <p class="metric-value" id="resSafety">—</p>
+            <p class="metric-sub">out of 120+</p>
+          </div>
+        </div>
+
+        <div class="pref-bar-wrap">
+          <div class="pref-bar-labels">
+            <span>0</span><span>30</span><span>60</span><span>90</span><span>120+</span>
+          </div>
+          <div class="pref-bar-outer">
+            <div class="pref-score-label" id="safetyScoreLabel">—</div>
+            <div class="pref-marker" id="safetyMarker" style="left:0%"></div>
+          </div>
+          <div class="pref-bar-section-labels">
+            <span>risky</span><span>uncertain</span><span>moderate</span><span>very safe</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-specific -->
+
+  <!-- PAGE: All Bets -->
+  <div id="page-all-bets">
+    <div class="bet-list" id="betList"></div>
+  </div>
+
+</div>
+
+<script>
+  const NFL_TEAMS = ["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LAC","LA","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"];
+  const YEARS = [2023, 2024, 2025];
+
+  const pTeamASel = document.getElementById('pTeamA_player');
+  const cTeamSel  = document.getElementById('cTeamA');
+  const currentYSel = document.getElementById('currentY');
+  const yearsWrap = document.getElementById('yearsWrap');
+
+  NFL_TEAMS.forEach(t => {
+    pTeamASel.innerHTML += `<option value="${t}">${t}</option>`;
+    cTeamSel.innerHTML  += `<option value="${t}">${t}</option>`;
+  });
+  YEARS.forEach(y => {
+    currentYSel.innerHTML += `<option value="${y}">${y}</option>`;
+    const chip = document.createElement('label');
+    chip.className = 'year-chip';
+    chip.innerHTML = `<input type="checkbox" value="${y}" />${y}`;
+    chip.addEventListener('click', () => {
+      setTimeout(() => chip.classList.toggle('active', chip.querySelector('input').checked), 0);
+    });
+    yearsWrap.appendChild(chip);
+  });
+
+  function switchTab(tab) {
+    document.getElementById('page-specific').style.display  = tab === 'specific' ? 'block' : 'none';
+    document.getElementById('page-all-bets').style.display  = tab === 'all'      ? 'block' : 'none';
+    document.getElementById('tab-specific').classList.toggle('active', tab === 'specific');
+    document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+  }
+
+  /* Hardcoded bets — already sorted by preferability desc */
+  const BETS = [
+    ['Tee Higgins',         'CIN','PIT', 18,2025,52,-110,-120,75.19, [326.99,171.28,'over',-110]],
+    ['Jerry Jeudy',         'CLE','PIT', 18,2025,35,100,-120, 48.78, [300.29,150.15,'over',100]],
+    ['DK Metcalf',          'PIT','CIN', 18,2025,46,-105,-115,63.05, [274.55,140.62,'over',-105]],
+    ['Tetairoa McMillan',   'CAR','ATL', 18,2025,54,-105,-115,42.52, [262.28,140.29,'under',-115]],
+    ['Rashee Rice',         'KC', 'LAC', 18,2025,52,-105,-115,70.99, [270.12,138.35,'over',-105]],
+    ['Jauan Jennings',      'SF', 'SEA', 18,2025,35,110,-130, 47.27, [277.72,132.25,'over',110]],
+    ['Zay Flowers',         'BAL','BUF', 18,2025,70,-120,100, 56.25, [241.71,120.86,'under',100]],
+    ['Davante Adams',       'LA','DAL', 18,2025,68,-110,-120,55.71, [189.96,103.62,'under',-120]],
+    ['Nico Collins',        'HOU','JAX', 18,2025,65,-110,-110,82.2,  [182.73,95.72,'over',-110]],
+    ['Drake London',        'ATL','ARI', 18,2025,52,-115,-105,63.36, [141.93,75.92,'over',-115]],
+    ['Garrett Wilson',      'NYJ','NE',  18,2025,48,-110,-120,41.06, [127.39,69.49,'under',-120]],
+    ["Ja'Marr Chase",       'CIN','PIT', 18,2025,80,-125,105, 92.15, [86.18,47.88,'over',-125]],
+    ['Chris Godwin Jr.',    'TB', 'NO',  18,2025,37,-110,-110,32.76, [88.89,46.56,'under',-110]],
+    ['Marvin Harrison Jr.', 'ARI','ATL', 18,2025,38,-110,-110,42.87, [73.10,38.29,'over',-110]],
+    ['Stefon Diggs',        'NE', 'BUF', 18,2025,55,-110,-110,60.45, [51.68,27.07,'over',-110]],
+    ['Puka Nacua',          'LA','DAL', 18,2025,101,-115,-105,92.88,[50.47,25.85,'under',-105]],
+    ['Jaxon Smith-Njigba',  'SEA','LA',  18,2025,99,-120,100, 91.24, [49.61,24.80,'under',100]],
+    ['Justin Jefferson',    'MIN','CHI', 18,2025,60,-130,110, 56.14, [37.86,18.03,'under',110]],
+    ['Rome Odunze',         'CHI','MIN', 18,2025,45,-110,-110,45.06, [0.09,0.05,'over',-110]],
+  ];
+
+  function fmtOdds(o) { return o > 0 ? `+${o}` : `${o}`; }
+
+  function renderBets() {
+    const list = document.getElementById('betList');
+    BETS.forEach(row => {
+      const [player, team, opp, week, , line, , , prediction, inner] = row;
+      const [pref, safety, ou, odds] = inner;
+      const isOver = ou === 'over';
+      const div = document.createElement('div');
+      div.className = 'bet-card';
+      div.innerHTML = `
+        <div class="bet-card-header">
+          <span class="bet-player">${player}</span>
+          <span class="bet-ou-badge ${isOver ? 'over' : 'under'}">${ou} ${fmtOdds(odds)}</span>
+        </div>
+        <div class="bet-matchup">
+          <b>${team}</b> vs <b>${opp}</b> &nbsp;·&nbsp; Wk <b>${week}</b>
+        </div>
+        <div class="bet-stats">
+          <div class="bet-stat">
+            <div class="bet-stat-label">Team</div>
+            <div class="bet-stat-value">${team}</div>
+          </div>
+          <div class="bet-stat">
+            <div class="bet-stat-label">Opponent</div>
+            <div class="bet-stat-value">${opp}</div>
+          </div>
+          <div class="bet-stat">
+            <div class="bet-stat-label">Week</div>
+            <div class="bet-stat-value">${week}</div>
+          </div>
+          <div class="bet-stat">
+            <div class="bet-stat-label">Line Set</div>
+            <div class="bet-stat-value">${line}</div>
+          </div>
+          <div class="bet-stat">
+            <div class="bet-stat-label">My Prediction</div>
+            <div class="bet-stat-value accent">${prediction.toFixed(2)}</div>
+          </div>
+          <div class="bet-stat">
+            <div class="bet-stat-label">O/U</div>
+            <div class="bet-stat-value">${ou}</div>
+          </div>
+        </div>
+        <div class="bet-divider"></div>
+        <div class="bet-scores">
+          <div class="bet-score">
+            <span class="bet-score-label">Preferability</span>
+            <span class="bet-score-value hi">${pref.toFixed(2)}</span>
+          </div>
+          <div class="bet-score">
+            <span class="bet-score-label">Safety Score</span>
+            <span class="bet-score-value">${safety.toFixed(2)}</span>
+          </div>
+          <div class="bet-score">
+            <span class="bet-score-label">Odds</span>
+            <span class="bet-score-value">${fmtOdds(odds)}</span>
+          </div>
+        </div>`;
+      list.appendChild(div);
+    });
+  }
+
+  renderBets();
+
+  /* Specific Bet helpers */
+  function getSelectedYears() {
+    const checked = [...document.querySelectorAll('.year-chip input:checked')].map(c => parseInt(c.value));
+    if (!checked.length) return [];
+    const min = Math.min(...checked), max = Math.max(...checked);
+    const all = [];
+    for (let y = min; y <= max; y++) all.push(y);
+    return all;
+  }
+
+  function showErr(msg) {
+    const el = document.getElementById('errMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  function updateBar(score, markerEl, labelEl, maxVal) {
+    const pct = Math.min(Math.max(score / maxVal, 0), 1) * 100;
+    markerEl.style.left = pct + '%';
+    labelEl.style.left  = pct + '%';
+    labelEl.textContent = score.toFixed(1);
+  }
+
+  async function runPrediction() {
+    const errEl   = document.getElementById('errMsg');
+    const spinner = document.getElementById('spinner');
+    const btn     = document.getElementById('runBtn');
+    const results = document.getElementById('results');
+
+    errEl.classList.remove('show');
+    results.classList.remove('show');
+
+    const years    = getSelectedYears();
+    const player   = document.getElementById('player').value.trim();
+    const currentW = parseInt(document.getElementById('currentW').value);
+    const PREDICT2 = parseFloat(document.getElementById('PREDICT2').value);
+    const o        = parseFloat(document.getElementById('o').value);
+    const u        = parseFloat(document.getElementById('u').value);
+
+    if (!years.length)                              { showErr('Please select at least one season year.'); return; }
+    if (!player)                                    { showErr('Please enter a player name.'); return; }
+    if (!currentW || currentW < 1 || currentW > 18){ showErr('Please enter a valid week (1–18).'); return; }
+    if (isNaN(PREDICT2))                            { showErr('Please enter a vegas line.'); return; }
+    if (isNaN(o) || isNaN(u))                       { showErr('Please enter over and under odds.'); return; }
+
+    const payload = {
+      years, player,
+      pTeamA: pTeamASel.value,
+      cTeamA: cTeamSel.value,
+      currentW, currentY: parseInt(currentYSel.value),
+      PREDICT2, csv: "data/WR2025.csv", o, u
+    };
+
+    btn.disabled = true;
+    spinner.classList.add('show');
+
+    try {
+      const res = await fetch('http://localhost:8000/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+
+      const pref   = data.preferability;
+      const safety = data.safety;
+      const side   = data.bet_side;
+      const odds   = data.bet_odds;
+      const oddsDisplay = odds > 0 ? `+${odds}` : `${odds}`;
+
+      document.getElementById('resPred').textContent      = Math.round(data.prediction);
+      document.getElementById('resPref').textContent      = pref.toFixed(2);
+      document.getElementById('resDirection').textContent = `for the ${side} ${oddsDisplay}`;
+      document.getElementById('resSafety').textContent    = safety.toFixed(2);
+
+      results.classList.add('show');
+      setTimeout(() => {
+        updateBar(pref,   document.getElementById('prefMarker'),   document.getElementById('prefScoreLabel'),   200);
+        updateBar(safety, document.getElementById('safetyMarker'), document.getElementById('safetyScoreLabel'), 120);
+      }, 50);
+
+    } catch(e) {
+      showErr('Could not reach the backend. Make sure your server is running on port 8000.');
+    } finally {
+      btn.disabled = false;
+      spinner.classList.remove('show');
+    }
+  }
+</script>
+</body>
+</html>
