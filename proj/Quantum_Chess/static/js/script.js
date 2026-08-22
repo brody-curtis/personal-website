@@ -38,12 +38,12 @@ function getImagePath(pieceName) {
     const isSplit = pieceName.endsWith('_S');
 
     const fileName = `${type}_${team}${isSplit ? '_S' : ''}.png`;
-    return `/static/img/${fileName}`;
+    return `/chess/static/img/${fileName}`;
 }
 
 async function fetchState() {
     const devMode = devModeSelect.value;
-    const res = await fetch(`/state?dev=${devMode}`);
+    const res = await fetch(`/chess/state?dev=${devMode}`);
     const data = await res.json();
     
     // Store the previous turn to check if it toggled
@@ -113,7 +113,7 @@ async function handleSquareClick(r, c, pieceName) {
             }
         } else {
             const destCoords = getPythonCoords(r, c);
-            await fetch('/move', {
+            await fetch('/chess/move', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ piece_name: selectionState.selectedSquare.name, coords: destCoords })
@@ -124,7 +124,7 @@ async function handleSquareClick(r, c, pieceName) {
     } 
     else if (actionState === 'split') {
         if (pieceName !== '--0--') {
-            await fetch('/split', {
+            await fetch('/chess/split', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ piece_name: pieceName })
@@ -156,7 +156,7 @@ async function handleSquareClick(r, c, pieceName) {
         // Step 3: Select fake dest & Send
         else {
             const fakeDest = getPythonCoords(r, c);
-            await fetch('/split_move', {
+            await fetch('/chess/split_move', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -199,7 +199,7 @@ btnSplitMove.addEventListener('click', () => resetActionState('split_move'));
 devModeSelect.addEventListener('change', fetchState);
 
 btnReset.addEventListener('click', async () => {
-    await fetch('/reset', { method: 'POST' });
+    await fetch('/chess/reset', { method: 'POST' });
     winnerIndicator.classList.add('hidden');
     resetActionState('move');
     fetchState();

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
@@ -26,7 +26,7 @@
         <h2>About</h2>
         <div class="about-content">
             <div class="photo-placeholder">
-                <img src="assets/HeadshotSum26.jpg" alt="Profile Photo Placeholder">
+                <img src="/static/assets/HeadshotSum26.jpg" alt="Profile Photo Placeholder">
             </div>
             <div class="about-text">
                 <p>I am a St. Louis Native that has been coding since I was 12.  I have always found ways to hone my technical abilities and show my love for problem solving through my personal projects and consistentaly coding every day.  And this summer I was the sole IT intern at Weissman (a global leader in B2B dancewear).</p>
@@ -36,7 +36,7 @@
                 <div class="resume-subsection">
                     <h3>Experience</h3>
                     <div class="info-block">
-                        <img src="assets/weissman.jpg" alt="Company Logo" class="info-logo">
+                        <img src="/static/assets/weissman.jpg" alt="Company Logo" class="info-logo">
                         <div class="info-details">
                             <h4>IT Intern</h4>
                             <p>Weissman</p>
@@ -50,7 +50,7 @@
                     <h3>Education</h3>
                     
                     <div class="info-block">
-                        <img src="assets/Illinois.png" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/Illinois.png" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>University of Illinois Urbana-Champaign</h4>
                             <p>Bachelor of Science in Computer Science with a Minor in Mathematics</p>
@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="info-block">
-                        <img src="assets/harvard.png" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/harvard.png" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>Harvard University</h4>
                             <p class="date">June 2024 - July 2024</p>
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="info-block">
-                        <img src="assets/IWCC.jpg" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/IWCC.jpg" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>Iowa Western Community College</h4>
                             <h5>GPA: 4.00</h5>
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="info-block">
-                        <img src="assets/SLU.jpg" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/SLU.jpg" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>Saint Louis University</h4>
                             <h5>GPA: 4.00</h5>
@@ -108,7 +108,7 @@
                     </div>
 
                     <div class="info-block">
-                        <img src="assets/SWIC.jpg" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/SWIC.jpg" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>Southwestern Illinois College</h4>
                             <h5>GPA: 4.00</h5>
@@ -124,7 +124,7 @@
                     </div>
 
                     <div class="info-block">
-                        <img src="assets/columbia.jpg" alt="School Logo" class="info-logo">
+                        <img src="/static/assets/columbia.jpg" alt="School Logo" class="info-logo">
                         <div class="info-details">
                             <h4>Columbia High School</h4>
                             <h5>GPA: 4.25</h5>
@@ -148,24 +148,24 @@
     <section id="skills" class="section-container bg-light">
         <h2>Skills</h2>
         <div class="skills-grid">
-            <div class="skill"><img src="assets/python.png" alt="Python"></div>
-            <div class="skill"><img src="assets/cpp.png" alt="C++"></div>
-            <div class="skill"><img src="assets/java.webp" alt="Java"></div>
-            <div class="skill"><img src="assets/sql.png" alt="SQL"></div>
-            <div class="skill"><img src="assets/js.png" alt="JavaScript"></div>
-            <div class="skill"><img src="assets/ruby.png" alt="Ruby"></div>
-            <div class="skill"><img src="assets/html5.png" alt="HTML/CSS"></div>
-            <div class="skill"><img src="assets/numpy.png" alt="Numpy"></div>
-            <div class="skill"><img src="assets/pandas.png" alt="Pandas"></div>
-            <div class="skill"><img src="assets/keras.avif" alt="Keras"></div>
-            <div class="skill"><img src="assets/tensorflow.png" alt="Tensorflow"></div>
-            <div class="skill"><img src="assets/matplotlib.webp" alt="MatPlotLib"></div>
-            <div class="skill"><img src="assets/vscode.png" alt="VSCode"></div>
-            <div class="skill"><img src="assets/docker.png" alt="Docker"></div>
-            <div class="skill"><img src="assets/nodejs.png" alt="NodeJS"></div>
-            <div class="skill"><img src="assets/git.png" alt="git"></div>
-            <div class="skill"><img src="assets/autocad.png" alt="AutoCAD"></div>
-            <div class="skill"><img src="assets/excel.png" alt="Excel"></div>
+            <div class="skill"><img src="/static/assets/python.png" alt="Python"></div>
+            <div class="skill"><img src="/static/assets/cpp.png" alt="C++"></div>
+            <div class="skill"><img src="/static/assets/java.webp" alt="Java"></div>
+            <div class="skill"><img src="/static/assets/sql.png" alt="SQL"></div>
+            <div class="skill"><img src="/static/assets/js.png" alt="JavaScript"></div>
+            <div class="skill"><img src="/static/assets/ruby.png" alt="Ruby"></div>
+            <div class="skill"><img src="/static/assets/html5.png" alt="HTML/CSS"></div>
+            <div class="skill"><img src="/static/assets/numpy.png" alt="Numpy"></div>
+            <div class="skill"><img src="/static/assets/pandas.png" alt="Pandas"></div>
+            <div class="skill"><img src="/static/assets/keras.avif" alt="Keras"></div>
+            <div class="skill"><img src="/static/assets/tensorflow.png" alt="Tensorflow"></div>
+            <div class="skill"><img src="/static/assets/matplotlib.webp" alt="MatPlotLib"></div>
+            <div class="skill"><img src="/static/assets/vscode.png" alt="VSCode"></div>
+            <div class="skill"><img src="/static/assets/docker.png" alt="Docker"></div>
+            <div class="skill"><img src="/static/assets/nodejs.png" alt="NodeJS"></div>
+            <div class="skill"><img src="/static/assets/git.png" alt="git"></div>
+            <div class="skill"><img src="/static/assets/autocad.png" alt="AutoCAD"></div>
+            <div class="skill"><img src="/static/assets/excel.png" alt="Excel"></div>
             
             
         </div>
@@ -174,9 +174,9 @@
     <section id="resume" class="section-container">
         <h2>Resume</h2>
         <div class="resume-placeholder">
-            <img src="assets/Resume.png" alt="Resume">
+            <img src="/static/assets/Resume.png" alt="Resume">
             <br>
-            <a href="assets/Resume.pdf" target="_blank" class="btn">View / Download PDF</a>
+            <a href="/static/assets/Resume.pdf" target="_blank" class="btn">View / Download PDF</a>
         </div>
     </section>
 
@@ -186,13 +186,13 @@
         
         <div class="projects-grid">
             <a href="projects/prediction-vegas/frontend/index.html" class="project-card">
-                <img src="assets/sportsbet.png" alt="Chess App Icon" class="project-icon">
+                <img src="/static/assets/sportsbet.png" alt="Chess App Icon" class="project-icon">
                 <h3>Sports Betting Analytics</h3>
                 <p>A data parsing tool built to pull and analyze player statistics and rosters. Click to view.</p>
             </a>
 
-            <a href="projects/Quantum_Chess/templates/index.html" class="project-card">
-                <img src="assets/chess.png" alt="Analytics Icon" class="project-icon">
+            <a href="/chess" class="project-card">
+                <img src="/static/assets/chess.png" alt="Analytics Icon" class="project-icon">
                 <h3>Quantum Chess</h3>
                 <p>A full-stack web application with a customized frontend and backend logic. Click to view.</p>
             </a>
@@ -204,17 +204,17 @@
         <p class="subtitle">Let's get in touch!</p>
         <div class="contact-grid">
             <div class="contact-item">
-                <img src="assets/email.png" alt="Email">
+                <img src="/static/assets/email.png" alt="Email">
                 <p>Email:</p>
                 <a href="mailto:bcurtis487@gmail.com">bcurtis487@gmail.com</a>
             </div>
             <div class="contact-item">
-                <img src="assets/linkedin.png" alt="LinkedIn">
+                <img src="/static/assets/linkedin.png" alt="LinkedIn">
                 <p>LinkedIn:</p>
                 <a href="https://www.linkedin.com/in/broderick-curtis-3780a3383/">linkedin.com/in/broderick-curtis-3780a3383/</a>
             </div>
             <div class="contact-item">
-                <img src="assets/instagram.png" alt="Instagram">
+                <img src="/static/assets/instagram.png" alt="Instagram">
                 <p>Instagram:</p>
                 <a href="https://www.instagram.com/brody__curtis/">@brody__curtis</a>
             </div>
