@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify
 import numpy as np
 
-chess_bp = Blueprint('chess', __name__, template_folder='templates', static_folder='static')
+app = Flask(__name__)
 
 # --- ORIGINAL GAME STATE & INITIALIZATION ---
 R_W_1 = {"Pos" : [1, 1], "Team" : "W", "Name" : "R_W_1", "Type" : "R", "Beg" : 1, "Split" : False, "Real" : True}
@@ -346,11 +346,11 @@ def get_piece_by_name(name):
             return p
     return None
 
-@chess_bp.route('/')
+@app.route('/')
 def index():
-    return render_template('chess/index.html')
+    return render_template('index.html')
 
-@chess_bp.route('/state', methods=['GET'])
+@app.route('/state', methods=['GET'])
 def get_state():
     dev_mode = request.args.get('dev', 'false').lower() == 'true'
     
@@ -367,7 +367,7 @@ def get_state():
         "board": board_view
     })
 
-@chess_bp.route('/move', methods=['POST'])
+@app.route('/move', methods=['POST'])
 def api_move():
     data = request.json
     piece = get_piece_by_name(data['piece_name'])
@@ -376,7 +376,7 @@ def api_move():
     success = move(piece, data['coords'])
     return jsonify({"success": success})
 
-@chess_bp.route('/split', methods=['POST'])
+@app.route('/split', methods=['POST'])
 def api_split():
     data = request.json
     piece = get_piece_by_name(data['piece_name'])
@@ -385,7 +385,7 @@ def api_split():
     success = split(piece)
     return jsonify({"success": success})
 
-@chess_bp.route('/split_move', methods=['POST'])
+@app.route('/split_move', methods=['POST'])
 def api_split_move():
     data = request.json
     real = get_piece_by_name(data['real_name'])
@@ -396,11 +396,11 @@ def api_split_move():
     splitMove(copy, data['copy_coords'], real, data['real_coords'])
     return jsonify({"success": True})
 
-@chess_bp.route('/reset', methods=['POST'])
+@app.route('/reset', methods=['POST'])
 def api_reset():
     resetBoard()
     return jsonify({"success": True})
 
-# if __name__ == '__main__':
-#     resetBoard()  # Initialize board on start
-#     app.run(debug=True, port=5000)
+if __name__ == '__main__':
+    resetBoard()  # Initialize board on start
+    app.run(debug=True, port=5000)
