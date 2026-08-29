@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arb Desk — Cross-Market Arbitrage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="deskbar">
+    <div class="deskbar__title">
+      <span class="deskbar__mark">⌁</span>
+      <h1>ARB&nbsp;DESK</h1>
+    </div>
+    <p class="deskbar__subtitle">Two legs, opposite sides, one guaranteed dollar — scanning Polymarket, Kalshi &amp; PredictIt for mispriced pairs.</p>
+
+    <div class="deskbar__controls">
+      <div class="sync-status" id="syncStatus">
+        <span class="sync-dot" id="syncDot"></span>
+        <span id="syncLabel">Not synced yet</span>
+      </div>
+      <button class="refresh-btn" id="refreshBtn">
+        <span class="refresh-btn__icon">↻</span>
+        <span id="refreshLabel">Run scan</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="empty-state" id="emptyState">
+      <p>No scan yet. Hit <strong>Run scan</strong> to pull live books from all three platforms.</p>
+    </div>
+    <div class="ticket-list" id="ticketList"></div>
+  </main>
+
+  <footer class="foot-note">
+    <p>Prices move constantly — treat every ticket as a snapshot, not a standing quote. Re-run the scan before acting on anything.</p>
+  </footer>
+
+  <template id="ticketTemplate">
+    <article class="ticket">
+      <div class="ticket__top">
+        <span class="ticket__roi"></span>
+        <span class="ticket__deadline"></span>
+      </div>
+
+      <div class="ticket__body">
+        <div class="ticket__leg ticket__leg--a">
+          <div class="leg-platform"></div>
+          <div class="leg-question"></div>
+          <div class="leg-action">
+            <span class="leg-action__side"></span>
+            <span class="leg-action__outcome"></span>
+          </div>
+          <div class="leg-price"></div>
+          <a class="leg-link" target="_blank" rel="noopener">Open market ↗</a>
+        </div>
+
+        <div class="ticket__stub" aria-hidden="true">
+          <span class="ticket__plus">+</span>
+        </div>
+
+        <div class="ticket__leg ticket__leg--b">
+          <div class="leg-platform"></div>
+          <div class="leg-question"></div>
+          <div class="leg-action">
+            <span class="leg-action__side"></span>
+            <span class="leg-action__outcome"></span>
+          </div>
+          <div class="leg-price"></div>
+          <a class="leg-link" target="_blank" rel="noopener">Open market ↗</a>
+        </div>
+      </div>
+
+      <div class="ticket__bottom">
+        <span class="ticket__cost"></span>
+        <span class="ticket__align"></span>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

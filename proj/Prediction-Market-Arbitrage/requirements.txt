@@ -1,0 +1,11 @@
+flask>=3.0
+requests>=2.31
+pandas>=2.0
+polyfuzz>=0.4.2
+scikit-learn>=1.3
+matplotlib
+# Note: polyfuzz depends on matplotlib only for a plotting helper we
+# never call, but importing polyfuzz still imports matplotlib.cm.get_cmap,
+# which matplotlib 3.9+ removed. matcher.py patches that name back in at
+# import time (see the top of matcher.py) so any reasonably current
+# matplotlib version works here -- no pin needed.

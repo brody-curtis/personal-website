@@ -1,0 +1,439 @@
+/* ============================================================
+   Tokens
+   ============================================================ */
+:root {
+  --bg: #0A0E14;
+  --bg-raised: #10161E;
+  --card: #131A23;
+  --card-border: #212B36;
+  --divider: #2A3543;
+
+  --text: #E7EAEE;
+  --text-muted: #8B95A5;
+  --text-faint: #566072;
+
+  --profit: #34D399;
+  --profit-dim: #1C4A3B;
+  --accent: #5AC8E8;
+  --warn: #E8B860;
+  --danger: #E0616B;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(90, 200, 232, 0.05), transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(52, 211, 153, 0.05), transparent 45%);
+}
+
+a { color: var(--accent); }
+
+/* ============================================================
+   Desk bar / header
+   ============================================================ */
+.deskbar {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px 28px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.deskbar__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deskbar__mark {
+  font-size: 1.6rem;
+  color: var(--profit);
+  line-height: 1;
+}
+
+.deskbar__title h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.9rem;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.deskbar__subtitle {
+  margin: 10px 0 26px;
+  max-width: 56ch;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.deskbar__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sync-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.sync-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.5);
+}
+
+.sync-dot.live {
+  background: var(--profit);
+  animation: pulse 2s infinite;
+}
+
+.sync-dot.scanning {
+  background: var(--warn);
+  animation: pulse 0.9s infinite;
+}
+
+.sync-dot.error {
+  background: var(--danger);
+}
+
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.45); }
+  70%  { box-shadow: 0 0 0 7px rgba(52, 211, 153, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease, background 0.15s ease;
+}
+
+.refresh-btn:hover {
+  border-color: var(--profit);
+  background: var(--bg-raised);
+}
+
+.refresh-btn:active {
+  transform: scale(0.97);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+.refresh-btn__icon {
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.refresh-btn.spinning .refresh-btn__icon {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Main / list
+   ============================================================ */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.empty-state {
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.ticket-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ============================================================
+   Ticket card — the signature element.
+   Two legs of a hedge, torn apart by a perforated stub,
+   because that's literally what the trade is: two opposite
+   tickets that only pay off together.
+   ============================================================ */
+.ticket {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  animation: rise 0.35s ease both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ticket__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--card-border);
+  background: var(--bg-raised);
+}
+
+.ticket__roi {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--profit);
+}
+
+.ticket__roi::after {
+  content: " ROI";
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  letter-spacing: 0.08em;
+}
+
+.ticket__deadline {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+}
+
+.ticket__deadline.soon {
+  color: var(--danger);
+  border-color: rgba(224, 97, 107, 0.4);
+}
+
+.ticket__deadline.near {
+  color: var(--warn);
+  border-color: rgba(232, 184, 96, 0.35);
+}
+
+.ticket__body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+}
+
+.ticket__leg {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.leg-platform {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.leg-question {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.leg-action {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.leg-action__side {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.leg-action__side.side-yes {
+  color: var(--profit);
+  background: var(--profit-dim);
+}
+
+.leg-action__side.side-no {
+  color: var(--danger);
+  background: rgba(224, 97, 107, 0.14);
+}
+
+.leg-action__outcome {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.leg-price {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.leg-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+.leg-link:hover { text-decoration: underline; }
+
+/* the perforated stub between the two legs */
+.ticket__stub {
+  position: relative;
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--divider) 0,
+    var(--divider) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.ticket__stub::before,
+.ticket__stub::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+}
+
+.ticket__stub::before { top: -8px; }
+.ticket__stub::after { bottom: -8px; }
+
+.ticket__plus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--bg-raised);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.ticket__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-top: 1px solid var(--card-border);
+  background: var(--bg-raised);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.ticket__align.flipped::before {
+  content: "flipped leg — outcomes verified opposite ";
+}
+
+.ticket__align.aligned::before {
+  content: "same outcome, both books ";
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.foot-note {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 640px) {
+  .ticket__body {
+    grid-template-columns: 1fr;
+  }
+  .ticket__stub {
+    width: auto;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--divider) 0,
+      var(--divider) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+  .ticket__stub::before { top: auto; left: -8px; transform: translateY(-50%); }
+  .ticket__stub::after { bottom: auto; left: auto; right: -8px; top: 50%; transform: translateY(-50%); }
+  .ticket__plus { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  .deskbar__controls { flex-direction: column; align-items: flex-start; }
+}
