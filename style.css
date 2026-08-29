@@ -223,3 +223,31 @@ body {
     font-size: 15px;
     color: #555;
 }
+
+.certificate-block {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.certificate-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.certificate-details h4 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.certificate-details p {
+    margin-bottom: 0;
+    color: #555;
+}
